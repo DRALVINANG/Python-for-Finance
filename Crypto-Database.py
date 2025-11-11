@@ -81,6 +81,13 @@ if 'PLATFORM' in crypto_coin[3]['category']:
     print('True')
 else:
     print('False')
+
+#--------------------------------------------------
+
+if crypto_coin[3]['24h_change'] > 5:
+    print('True')
+else:
+    print ("Do not buy! Not volatile enough!")
     
     
 #THE END
