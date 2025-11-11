@@ -59,3 +59,4 @@ else:
 
     # Display the chart
     candlestick.show()
+
