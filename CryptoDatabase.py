@@ -11,46 +11,51 @@ stock_data_urls = {
     "INTC": "https://raw.githubusercontent.com/DRALVINANG/Streamlit/refs/heads/main/datasets/intc_2024.csv"
 }
 
-# Select stock (AAPL for this example)
-selected_stock = "AAPL"
+# Prompt the user to select a stock from the available options
+print("Available stocks: AAPL, TSLA, AMZN, MSFT, NVDA, INTC")
+selected_stock = input("Which stock would you like to view? ").upper()
 
-# Fetch the data
-stock_data_url = stock_data_urls[selected_stock]
-stock_data = pd.read_csv(stock_data_url)
+# Check if the selected stock is valid
+if selected_stock not in stock_data_urls:
+    print(f"Invalid stock selected: {selected_stock}. Please choose from the available options.")
+else:
+    # Fetch the data
+    stock_data_url = stock_data_urls[selected_stock]
+    stock_data = pd.read_csv(stock_data_url)
 
-# Convert the 'Date' column to datetime and set it as the index
-stock_data['Date'] = pd.to_datetime(stock_data['Date'])
-stock_data.set_index('Date', inplace=True)
+    # Convert the 'Date' column to datetime and set it as the index
+    stock_data['Date'] = pd.to_datetime(stock_data['Date'])
+    stock_data.set_index('Date', inplace=True)
 
-# Create the candlestick chart
-candlestick = go.Figure(data=[go.Candlestick(
-    x=stock_data.index,
-    open=stock_data["Open"],
-    high=stock_data["High"],
-    low=stock_data["Low"],
-    close=stock_data["Close"]
-)])
+    # Create the candlestick chart
+    candlestick = go.Figure(data=[go.Candlestick(
+        x=stock_data.index,
+        open=stock_data["Open"],
+        high=stock_data["High"],
+        low=stock_data["Low"],
+        close=stock_data["Close"]
+    )])
 
-# Update the chart layout and axes
-candlestick.update_xaxes(
-    title_text="Date",
-    rangeslider_visible=True,
-    rangeselector=dict(
-        buttons=list([
-            dict(count=1, label="1M", step="month", stepmode="backward"),
-            dict(count=6, label="6M", step="month", stepmode="backward"),
-            dict(count=1, label="YTD", step="year", stepmode="todate"),
-            dict(count=1, label="1Y", step="year", stepmode="backward"),
-            dict(step="all")
-        ])
+    # Update the chart layout and axes
+    candlestick.update_xaxes(
+        title_text="Date",
+        rangeslider_visible=True,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1M", step="month", stepmode="backward"),
+                dict(count=6, label="6M", step="month", stepmode="backward"),
+                dict(count=1, label="YTD", step="year", stepmode="todate"),
+                dict(count=1, label="1Y", step="year", stepmode="backward"),
+                dict(step="all")
+            ])
+        )
     )
-)
 
-candlestick.update_layout(
-    title=f"{selected_stock} Share Price (2013-2024)",
-    yaxis_title=f"{selected_stock} Close Price",
-    yaxis=dict(tickprefix="$")
-)
+    candlestick.update_layout(
+        title=f"{selected_stock} Share Price (2013-2024)",
+        yaxis_title=f"{selected_stock} Close Price",
+        yaxis=dict(tickprefix="$")
+    )
 
-# Display the chart
-candlestick.show()
+    # Display the chart
+    candlestick.show()
